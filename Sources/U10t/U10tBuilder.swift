@@ -1,15 +1,15 @@
 import Foundation
 
-typealias U10tCachePolicy = URLRequest.CachePolicy
+public typealias U10tCachePolicy = URLRequest.CachePolicy
 
-enum U10tMethod: String {
+public enum U10tMethod: String {
     case get = "GET"
     case post = "POST"
     case update = "UPDATE"
     case delete = "DELETE"
 }
 
-struct U10tBuilderParams {
+public struct U10tBuilderParams {
     var method: U10tMethod = .get
     var scheme = U10tConfig.scheme
     var host = U10tConfig.host
@@ -22,60 +22,61 @@ struct U10tBuilderParams {
     var body: Data? = nil
 }
 
-struct U10tBuilder {
-    private(set) var params = U10tBuilderParams()
+@available(macOS 12, iOS 15, watchOS 8, tvOS 15, *)
+public struct U10tBuilder {
+    public private(set) var params = U10tBuilderParams()
     
     @discardableResult
-    func method(_ mthd: U10tMethod) -> Self {
+    public func method(_ mthd: U10tMethod) -> Self {
         var builder = self
         builder.params.method = mthd
         return builder
     }
     
     @discardableResult
-    func header(_ value: String, for key: String) -> Self {
+    public func header(_ value: String, for key: String) -> Self {
         var builder = self
         builder.params.headers[key] = value
         return builder
     }
     
     @discardableResult
-    func queryString(_ value: String, for key: String) -> Self {
+    public func queryString(_ value: String, for key: String) -> Self {
         var builder = self
         builder.params.queryStrings[key] = value
         return builder
     }
     
     @discardableResult
-    func routeParam(_ value: String, for key: String) -> Self {
+    public func routeParam(_ value: String, for key: String) -> Self {
         var builder = self
         builder.params.routeParams[key] = value
         return builder
     }
     
     @discardableResult
-    func endpoint(_ ep: String) -> Self {
+    public func endpoint(_ ep: String) -> Self {
         var builder = self
         builder.params.endpoint = ep
         return builder
     }
     
     @discardableResult
-    func host(_ hst: String) -> Self {
+    public func host(_ hst: String) -> Self {
         var builder = self
         builder.params.host = hst
         return builder
     }
     
     @discardableResult
-    func scheme(_ schm: String) -> Self {
+    public func scheme(_ schm: String) -> Self {
         var builder = self
         builder.params.scheme = schm
         return builder
     }
     
     @discardableResult
-    func body<T>(_ bdy: T) -> Self where T : Encodable {
+    public func body<T>(_ bdy: T) -> Self where T : Encodable {
         var builder = self
         if let encoded = try? JSONEncoder().encode(bdy) {
             builder.params.body = encoded
@@ -84,16 +85,31 @@ struct U10tBuilder {
     }
     
     @discardableResult
-    func port(_ prt: Int) -> Self {
+    public func port(_ prt: Int) -> Self {
         var builder = self
         builder.params.port = prt
         return builder
     }
     
     @discardableResult
-    func cachePolicy(_ cache: U10tCachePolicy) -> Self {
+    public func cachePolicy(_ cache: U10tCachePolicy) -> Self {
         var builder = self
         builder.params.cachePolicy = cache
         return builder
+    }
+
+    public func build() -> U10t {
+        .init(
+            host: params.host,
+            scheme: params.scheme,
+            queryStrings: params.queryStrings,
+            endpoint: params.endpoint,
+            method: params.method.rawValue,
+            headers: params.headers,
+            body: params.body,
+            routeParams: params.routeParams,
+            port: params.port,
+            cachePolity: params.cachePolicy
+        )
     }
 }

@@ -3,11 +3,11 @@ import Foundation
 @available(macOS 12, iOS 15, watchOS 8, tvOS 15, *)
 public struct U10t {
     private var u10tReq: URLRequest?
-    
-    static var builder: U10tBuilder {
+
+    public static var builder: U10tBuilder {
         .init()
     }
-    
+
     init(
         host: String,
         scheme: String = "http",
