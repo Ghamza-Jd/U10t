@@ -1,4 +1,4 @@
-enum U10tOption {
+public enum U10tOption {
     case host(String)
     case scheme(String)
     case port(Int)

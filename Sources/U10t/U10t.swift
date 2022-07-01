@@ -59,7 +59,7 @@ public struct U10t {
         u10tReq = req
     }
 
-    func send<T: Decodable>() async throws -> T {
+    public func send<T: Decodable>() async throws -> T {
         guard let req = u10tReq else {
             throw U10tException.corruptedRequest
         }
@@ -73,7 +73,7 @@ public struct U10t {
         }
     }
 
-    static func config(_ options: [U10tOption]) {
+    public static func config(_ options: [U10tOption]) {
         for option in options {
             switch option {
             case let .host(h):
